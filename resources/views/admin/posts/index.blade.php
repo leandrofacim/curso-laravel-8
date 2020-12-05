@@ -1,3 +1,9 @@
+@extends('admin.layouts.app')
+
+@section('title', 'Listagem dos Posts')
+
+@section('content')
+
 <a href="{{ route('posts.create') }}">Criar Novo Post</a>
 
 @if (session('message'))
@@ -6,9 +12,29 @@
     </div>
 @endif
 
+<h1>Pots</h1>
+
+<form action="{{ route('posts.search') }}" method="post">
+    @csrf
+    <input type="text" name="search" placeholder="Filtrar">
+    <button type="submit">Filtrar</button>
+</form>
+
 @foreach ($posts as $post)
   
     <p>{{ $post->title }} </p>
+    <p>{{ $post->content }} </p>
     <a href="{{ route('posts.show',$post->id) }}">Ver</a>
+    <a href="{{ route('posts.edit',$post->id) }}">edit</a>
     
 @endforeach
+<hr>
+
+@if (isset($filters))
+    {{ $posts->appends($filters)->links() }}
+@else
+    {{ $posts->links() }}
+@endif
+
+
+@endsection
